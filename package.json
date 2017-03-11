@@ -1,0 +1,49 @@
+{
+  "name": "@rappestad/winston-nodemailer",
+  "version": "1.0.0",
+  "description": "A nodemailer transport for winston",
+  "main": "./dist/winston-nodemailer.js",
+  "typings": "./dist/winston-nodemailer.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint lib/",
+    "watch": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rappestad/winston-nodemailer.git"
+  },
+  "contributors": [
+    {
+      "name": "Olof Rappestad",
+      "email": "olof.rappestad@gmail.com"
+    }
+  ],
+  "keywords": [
+    "winston",
+    "nodemailer",
+    "mail",
+    "typescript"
+  ],
+  "author": "Olof Rappestad <olof.rappestad@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rappestad/winston-nodemailer/issues"
+  },
+  "homepage": "https://github.com/rappestad/winston-nodemailer#readme",
+  "peerDependencies": {
+    "nodemailer": "^3.1.5",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^1.3.32",
+    "@types/winston": "^2.2.0",
+    "tslint": "^4.5.1",
+    "typescript": "^2.2.1"
+  },
+  "engines": {
+    "node": ">= 6.0"
+  }
+}

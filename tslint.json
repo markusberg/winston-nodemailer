@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "class-name": true,
+    "quotemark": [
+      "single"
+    ],
+    "no-unreachable": true,
+    "no-use-before-declare": true,
+    "no-var-requires": true
+  }
+}

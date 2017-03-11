@@ -1,0 +1,8 @@
+*
+!dist/**
+!package.json
+!LICENSE
+!CHANGELOG.md
+!CONTRIBUTING.md
+!README.md
+!tsconfig.json
