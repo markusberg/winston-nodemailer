@@ -1,4 +1,4 @@
-# winston-nodemailer
+# @rappestad/winston-nodemailer
 A [nodemailer](https://www.npmjs.com/package/nodemailer) transport for winston
 
 ## Installation
