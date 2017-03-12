@@ -51,11 +51,7 @@ export class WinstonNodemailer extends Transport implements TransportInstance {
       return callback(null, true)
     }
 
-    const buildMessage = () => {
-      return `${this.timestamp()} - ${msg}\n${JSON.stringify(meta, null, 4)}\n\n`
-    }
-
-    this.messageBuffer.push(buildMessage())
+    this.messageBuffer.push(`${this.timestamp()} - ${msg}\n${JSON.stringify(meta, null, 4)}\n\n`)
 
     if (!this.triggered) {
       this.triggered = setTimeout(() => {
