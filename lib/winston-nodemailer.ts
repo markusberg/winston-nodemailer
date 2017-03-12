@@ -31,9 +31,9 @@ export class WinstonNodemailer extends Transport implements TransportInstance {
 
   private sendMail (callback: Function) {
     this.transporter
-      .sendMail(Object.assign({
+      .sendMail(Object.assign(this.options, {
         text: this.messageBuffer.join('')
-      }, this.options))
+      }))
       .then(res => {
         this.emit('logged')
         callback(null, true)
