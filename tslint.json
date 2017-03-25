@@ -1,11 +1,17 @@
 {
+  "extends": "tslint:latest",
   "rules": {
-    "class-name": true,
     "quotemark": [
       "single"
     ],
-    "no-unreachable": true,
-    "no-use-before-declare": true,
-    "no-var-requires": true
+    "semicolon": {
+      "options": "never"
+    },
+    "ordered-imports": {
+      "options": {
+        "import-sources-order": "case-sensitive",
+        "named-imports-order": "case-sensitive"
+      }
+    }
   }
 }

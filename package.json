@@ -8,7 +8,7 @@
     "build": "tsc",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "tslint lib/",
+    "lint": "tslint lib/**/*.ts; exit 0",
     "watch": "tsc --watch"
   },
   "repository": {
