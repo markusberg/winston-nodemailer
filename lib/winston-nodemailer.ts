@@ -1,17 +1,17 @@
-import { GenericTransportOptions, Transport, TransportInstance, log, transports } from 'winston'
+import { GenericTransportOptions, LogCallback, Transport, TransportInstance, log, transports } from 'winston'
 import { SendMailOptions, Transporter, createTransport } from 'nodemailer'
 
 import { SmtpOptions } from 'nodemailer-smtp-transport'
 
 export interface IWinstonNodemailerOptions extends GenericTransportOptions, SendMailOptions, SmtpOptions {
   debounce?: number
-  timestamp?: Function
+  timestamp?: () => string
 }
 
 export class WinstonNodemailer extends Transport implements TransportInstance {
   private debounce: number
   private messageBuffer: string[]
-  private timestamp: Function
+  private timestamp: () => string
   private transporter: Transporter
   private triggered: NodeJS.Timer
 
@@ -30,9 +30,9 @@ export class WinstonNodemailer extends Transport implements TransportInstance {
     this.transporter = createTransport(options)
   }
 
-  public log(level: string, msg: string, meta: object, callback: Function) {
+  public log(level: string, msg: string, meta: object, callback: LogCallback) {
     if (this.silent) {
-      return callback(null, true)
+      return callback(null, undefined)
     }
 
     this.messageBuffer.push(`${this.timestamp()} - ${msg}\n${JSON.stringify(meta, null, 4)}\n\n`)
@@ -44,7 +44,7 @@ export class WinstonNodemailer extends Transport implements TransportInstance {
     }
   }
 
-  private sendMail(callback: Function) {
+  private sendMail(callback: LogCallback) {
     this.transporter
       .sendMail(Object.assign(this.options, {
         text: this.messageBuffer.join(''),
