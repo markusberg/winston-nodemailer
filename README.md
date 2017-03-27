@@ -1,6 +1,9 @@
 # @rappestad/winston-nodemailer
 A [nodemailer](https://www.npmjs.com/package/nodemailer) transport for winston
 
+[![Build Status](https://travis-ci.org/rappestad/winston-nodemailer.svg?branch=master)](https://travis-ci.org/rappestad/winston-nodemailer)
+[![Coverage Status](https://coveralls.io/repos/github/rappestad/winston-nodemailer/badge.svg?branch=master)](https://coveralls.io/github/rappestad/winston-nodemailer?branch=master)
+
 ## Installation
 Install the module and the typescript definitions:
 ```bash
