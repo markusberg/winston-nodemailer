@@ -1,8 +1,12 @@
 # @rappestad/winston-nodemailer
 A [nodemailer](https://www.npmjs.com/package/nodemailer) transport for winston
 
-[![Build Status](https://travis-ci.org/rappestad/winston-nodemailer.svg?branch=master)](https://travis-ci.org/rappestad/winston-nodemailer)
-[![Coverage Status](https://coveralls.io/repos/github/rappestad/winston-nodemailer/badge.svg?branch=master)](https://coveralls.io/github/rappestad/winston-nodemailer?branch=master)
+[![npm (scoped)](https://img.shields.io/npm/v/@rappestad/winston-nodemailer.svg)](https://www.npmjs.com/package/@rappestad/winston-nodemailer)
+[![license](https://img.shields.io/github/license/rappestad/winston-nodemailer.svg)](https://github.com/rappestad/winston-nodemailer/blob/master/LICENSE)
+[![Build Status](https://img.shields.io/travis/rappestad/winston-nodemailer.svg)](https://travis-ci.org/rappestad/winston-nodemailer)
+[![Coverage Status](https://img.shields.io/coveralls/rappestad/winston-nodemailer.svg)](https://coveralls.io/github/rappestad/winston-nodemailer?branch=master)
+[![David](https://img.shields.io/david/peer/rappestad/winston-nodemailer.svg)]()
+[![David](https://img.shields.io/david/dev/rappestad/winston-nodemailer.svg)]()
 
 ## Installation
 Install the module and the typescript definitions:
