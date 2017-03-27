@@ -1,15 +1,24 @@
 {
   "name": "@rappestad/winston-nodemailer",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A nodemailer transport for winston",
-  "main": "./dist/winston-nodemailer.js",
-  "typings": "./dist/winston-nodemailer.d.ts",
+  "main": "./lib/winston-nodemailer.js",
+  "typings": "./lib/winston-nodemailer.d.ts",
   "scripts": {
     "build": "tsc",
-    "prepublish": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "tslint lib/**/*.ts; exit 0",
-    "watch": "tsc --watch"
+    "build:publish": "tsc --newLine \"LF\"",
+    "clean": "npm run clean:built && npm run clean:git",
+    "clean:built": "rimraf **/*.js **/*.js.map **/*.d.ts",
+    "clean:git": "git clean -X -d -f",
+    "prepublish": "in-publish && npm run clean && npm install && npm test-publish && npm run build:publish || not-in-publish",
+    "postpublish": "node ./scripts/tag-release",
+    "pretest": "npm run build",
+    "test": "npm run review && npm run check-coverage",
+    "unit-tests": "mocha ./test/**/*.spec.js",
+    "check-coverage": "npm run build && nyc --reporter=lcov --reporter=html npm run unit-tests && nyc report",
+    "review": "npm run review:code && npm run review:tests",
+    "review:code": "tslint lib/**/*.ts --exclude lib/**/*.d.ts",
+    "review:tests": "tslint test/**/*.ts --exclude test/**/*.d.ts"
   },
   "repository": {
     "type": "git",
@@ -38,10 +47,22 @@
     "winston": "^2.3.1"
   },
   "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "@types/mocha": "^2.2.40",
+    "@types/mockery": "^1.4.29",
     "@types/nodemailer": "^1.3.32",
+    "@types/smtp-server": "^1.15.0",
     "@types/winston": "^2.2.0",
+    "chai": "^3.5.0",
+    "in-publish": "^2.0.0",
+    "mocha": "^3.2.0",
+    "nodemailer": "^3.1.8",
+    "nyc": "^10.1.2",
+    "rimraf": "^2.6.1",
+    "smtp-server": "^2.0.3",
     "tslint": "^4.5.1",
-    "typescript": "^2.2.1"
+    "typescript": "^2.2.1",
+    "winston": "^2.3.1"
   },
   "engines": {
     "node": ">= 6.0"

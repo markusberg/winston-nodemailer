@@ -20,6 +20,7 @@ export class WinstonNodemailer extends Transport implements TransportInstance {
 
     this.level = options.level || 'error'
     this.name = 'nodemailer'
+    this.silent = !!options.silent
 
     this.debounce = options.debounce || 60000
     this.timestamp = options.timestamp || (() => (new Date()).toISOString())
@@ -48,13 +49,6 @@ export class WinstonNodemailer extends Transport implements TransportInstance {
       .sendMail(Object.assign(this.options, {
         text: this.messageBuffer.join(''),
       }))
-      .then((res) => {
-        this.emit('logged')
-        callback(null, true)
-      })
-      .catch((err) => {
-        this.emit('error', err)
-      })
 
     this.messageBuffer = []
     delete this.triggered
