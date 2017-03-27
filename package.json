@@ -10,7 +10,7 @@
     "clean": "npm run clean:built && npm run clean:git",
     "clean:built": "rimraf **/*.js **/*.js.map **/*.d.ts",
     "clean:git": "git clean -X -d -f",
-    "prepublish": "in-publish && npm run clean && npm install && npm test-publish && npm run build:publish || not-in-publish",
+    "prepublish": "in-publish && npm run clean && npm install && npm test && npm run build:publish || not-in-publish",
     "postpublish": "node ./scripts/tag-release",
     "pretest": "npm run build",
     "test": "npm run review && npm run check-coverage",
