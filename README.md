@@ -1,5 +1,5 @@
 # @rappestad/winston-nodemailer
-A [nodemailer](https://www.npmjs.com/package/nodemailer) transport for winston
+A [nodemailer](https://www.npmjs.com/package/nodemailer) transport for [winston](https://www.npmjs.com/package/winston)
 
 [![npm (scoped)](https://img.shields.io/npm/v/@rappestad/winston-nodemailer.svg)](https://www.npmjs.com/package/@rappestad/winston-nodemailer)
 [![license](https://img.shields.io/github/license/rappestad/winston-nodemailer.svg)](https://github.com/rappestad/winston-nodemailer/blob/master/LICENSE)
