@@ -2,8 +2,8 @@
   "extends": "tslint:latest",
   "rules": {
     "quotemark": [ true, "single" ],
-    "semicolon": [true, "never"],
-    "ordered-imports": [ false ],
+    "semicolon": [ true, "never" ],
+    "ordered-imports": false,
     "no-object-literal-type-assertion": false
   }
 }
