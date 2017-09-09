@@ -1,6 +1,6 @@
 {
   "name": "@rappestad/winston-nodemailer",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A nodemailer transport for winston",
   "main": "./lib/winston-nodemailer.js",
   "typings": "./lib/winston-nodemailer.d.ts",
