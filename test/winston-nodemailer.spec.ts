@@ -12,15 +12,17 @@ function delay(ms: number) {
 
 let smtpServer: SMTPServer
 let emails: any[]
+const port = 2500
+const to = 'lucy@example.com'
 
 describe('winston-nodemailer', () => {
-  before((done: MochaDone) => {
+  before((done: Mocha.Done) => {
     smtpServer = new SMTPServer({
       disabledCommands: ['AUTH', 'STARTTLS'],
-      onData: (stream, session, cb) => {
+      onData: (stream, _session, cb) => {
         let msg = ''
         stream.on('data', (chunk: any) => {
-          chunk = (new Buffer(chunk)).toString()
+          chunk = Buffer.from(chunk).toString()
           msg += chunk
         })
         stream.on('error', cb)
@@ -30,8 +32,8 @@ describe('winston-nodemailer', () => {
       },
     })
 
-    smtpServer.listen(2500, '0.0.0.0', (err: Error) => {
-      done(err)
+    smtpServer.listen(port, '0.0.0.0', () => {
+      done()
     })
   })
 
@@ -45,8 +47,8 @@ describe('winston-nodemailer', () => {
         new WinstonNodemailer({
           debounce: 10,
           host: 'localhost',
-          port: 2500,
-          to: 'lucy@thesky.com',
+          port,
+          to,
         }),
       ],
     })
@@ -64,9 +66,9 @@ describe('winston-nodemailer', () => {
         new WinstonNodemailer({
           debounce: 10,
           host: 'localhost',
-          port: 2500,
+          port,
           silent: true,
-          to: 'lucy@thesky.com',
+          to,
         }),
       ],
     })
@@ -84,8 +86,8 @@ describe('winston-nodemailer', () => {
         new WinstonNodemailer({
           debounce: 10,
           host: 'localhost',
-          port: 2500,
-          to: 'lucy@thesky.com',
+          port,
+          to,
         }),
       ],
     })
@@ -96,9 +98,7 @@ describe('winston-nodemailer', () => {
     await delay(300)
 
     expect(emails).to.have.length(1)
-    expect(emails[0])
-      .to.contain('First error')
-      .and.to.contain('Second error')
+    expect(emails[0]).to.contain('First error').and.to.contain('Second error')
   })
 
   it('should split into two emails', async () => {
@@ -107,8 +107,8 @@ describe('winston-nodemailer', () => {
         new WinstonNodemailer({
           debounce: 25,
           host: 'localhost',
-          port: 2500,
-          to: 'lucy@thesky.com',
+          port,
+          to,
         }),
       ],
     })
