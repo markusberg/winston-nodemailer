@@ -17,7 +17,7 @@ const to = 'lucy@example.com'
 describe('winston-nodemailer', () => {
   beforeAll((done) => {
     smtpServer = new SMTPServer({
-      closeTimeout: 50,
+      closeTimeout: 500,
       disabledCommands: ['AUTH', 'STARTTLS'],
       onData: (stream, _session, cb) => {
         let msg = ''
@@ -39,64 +39,56 @@ describe('winston-nodemailer', () => {
   })
 
   afterAll((done) => {
-    smtpServer.close()
-    done()
+    smtpServer.close(() => {
+      done()
+    })
   })
 
   beforeEach(() => {
+    winston.clear()
     emails = []
   })
 
   it('should send an email', async () => {
-    winston.configure({
-      transports: [
-        new WinstonNodemailer({
-          debounce: 10,
-          host: 'localhost',
-          port,
-          to,
-        }),
-      ],
-    })
+    winston.add(
+      new WinstonNodemailer({
+        debounce: 10,
+        host: 'localhost',
+        port,
+        to,
+      }),
+    )
 
     winston.error('OMGZ ERROR!')
-
     await delay(300)
-
     expect(emails).toHaveLength(1)
   })
 
   it('should stay silent', async () => {
-    winston.configure({
-      transports: [
-        new WinstonNodemailer({
-          debounce: 10,
-          host: 'localhost',
-          port,
-          silent: true,
-          to,
-        }),
-      ],
-    })
+    winston.add(
+      new WinstonNodemailer({
+        debounce: 10,
+        host: 'localhost',
+        port,
+        silent: true,
+        to,
+      }),
+    )
 
     winston.error('Shut up Winston!')
-
     await delay(300)
-
     expect(emails).toHaveLength(0)
   })
 
   it('should debounce into one email', async () => {
-    winston.configure({
-      transports: [
-        new WinstonNodemailer({
-          debounce: 10,
-          host: 'localhost',
-          port,
-          to,
-        }),
-      ],
-    })
+    winston.add(
+      new WinstonNodemailer({
+        debounce: 10,
+        host: 'localhost',
+        port,
+        to,
+      }),
+    )
 
     winston.error('First error')
     winston.error('Second error')
@@ -109,23 +101,18 @@ describe('winston-nodemailer', () => {
   })
 
   it('should split into two emails', async () => {
-    winston.configure({
-      transports: [
-        new WinstonNodemailer({
-          debounce: 25,
-          host: 'localhost',
-          port,
-          to,
-        }),
-      ],
-    })
+    winston.add(
+      new WinstonNodemailer({
+        debounce: 25,
+        host: 'localhost',
+        port,
+        to,
+      }),
+    )
 
     winston.error('First error')
-
     await delay(50)
-
     winston.error('Second error')
-
     await delay(300)
 
     expect(emails).toHaveLength(2)
@@ -133,24 +120,18 @@ describe('winston-nodemailer', () => {
     expect(emails[1]).toContain('Second error')
   })
 
-  it('should suppress all logs on silent', async () => {
-    winston.configure({
-      transports: [
-        new WinstonNodemailer({
-          silent: true,
-          debounce: 25,
-          host: 'localhost',
-          port,
-          to,
-        }),
-      ],
-    })
+  it('should only listen to logs of its configured level', async () => {
+    winston.add(
+      new WinstonNodemailer({
+        debounce: 25,
+        host: 'localhost',
+        port,
+        to,
+      }),
+    )
 
-    winston.error('First error')
-    winston.error('Second error')
-
+    winston.info('This is an info-level log')
     await delay(50)
-
     expect(emails).toHaveLength(0)
   })
 })
