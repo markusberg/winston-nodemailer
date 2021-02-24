@@ -2,7 +2,6 @@ import * as winston from 'winston'
 
 import { SMTPServer } from 'smtp-server'
 import { WinstonNodemailer } from '../lib/winston-nodemailer'
-import { expect } from 'chai'
 
 function delay(ms: number) {
   return new Promise<void>((resolve) => {
@@ -16,8 +15,9 @@ const port = 2500
 const to = 'lucy@example.com'
 
 describe('winston-nodemailer', () => {
-  before((done: Mocha.Done) => {
+  beforeAll((done) => {
     smtpServer = new SMTPServer({
+      closeTimeout: 50,
       disabledCommands: ['AUTH', 'STARTTLS'],
       onData: (stream, _session, cb) => {
         let msg = ''
@@ -28,6 +28,7 @@ describe('winston-nodemailer', () => {
         stream.on('error', cb)
         stream.on('end', () => {
           emails.push(msg)
+          stream.destroy()
         })
       },
     })
@@ -35,6 +36,11 @@ describe('winston-nodemailer', () => {
     smtpServer.listen(port, '0.0.0.0', () => {
       done()
     })
+  })
+
+  afterAll((done) => {
+    smtpServer.close()
+    done()
   })
 
   beforeEach(() => {
@@ -57,7 +63,7 @@ describe('winston-nodemailer', () => {
 
     await delay(300)
 
-    expect(emails).to.have.length(1)
+    expect(emails).toHaveLength(1)
   })
 
   it('should stay silent', async () => {
@@ -77,7 +83,7 @@ describe('winston-nodemailer', () => {
 
     await delay(300)
 
-    expect(emails).to.have.length(0)
+    expect(emails).toHaveLength(0)
   })
 
   it('should debounce into one email', async () => {
@@ -97,8 +103,9 @@ describe('winston-nodemailer', () => {
 
     await delay(300)
 
-    expect(emails).to.have.length(1)
-    expect(emails[0]).to.contain('First error').and.to.contain('Second error')
+    expect(emails).toHaveLength(1)
+    expect(emails[0]).toContain('First error')
+    expect(emails[0]).toContain('Second error')
   })
 
   it('should split into two emails', async () => {
@@ -121,8 +128,29 @@ describe('winston-nodemailer', () => {
 
     await delay(300)
 
-    expect(emails).to.have.length(2)
-    expect(emails[0]).to.contain('First error')
-    expect(emails[1]).to.contain('Second error')
+    expect(emails).toHaveLength(2)
+    expect(emails[0]).toContain('First error')
+    expect(emails[1]).toContain('Second error')
+  })
+
+  it('should suppress all logs on silent', async () => {
+    winston.configure({
+      transports: [
+        new WinstonNodemailer({
+          silent: true,
+          debounce: 25,
+          host: 'localhost',
+          port,
+          to,
+        }),
+      ],
+    })
+
+    winston.error('First error')
+    winston.error('Second error')
+
+    await delay(50)
+
+    expect(emails).toHaveLength(0)
   })
 })

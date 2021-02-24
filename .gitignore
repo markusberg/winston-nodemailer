@@ -2,11 +2,5 @@
 node_modules
 npm-debug.log*
 
-#TypeScript
-*.js
-*.js.map
-*.d.ts
-
-#Test
+dist
 coverage
-.nyc_output

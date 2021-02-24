@@ -1,7 +1,6 @@
 *
 .*
-!lib/**/*.js
-!lib/**/*.d.ts
+!dist/**/*
 !package.json
 !LICENSE
 !CHANGELOG.md

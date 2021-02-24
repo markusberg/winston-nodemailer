@@ -2,16 +2,14 @@
   "name": "@rappestad/winston-nodemailer",
   "version": "3.0.3",
   "description": "A nodemailer transport for winston",
-  "main": "./lib/winston-nodemailer.js",
-  "typings": "./lib/winston-nodemailer.d.ts",
+  "main": "./dist/winston-nodemailer.js",
+  "typings": "./dist/winston-nodemailer.d.ts",
   "scripts": {
     "build": "tsc",
-    "clean": "npm run clean:built && npm run clean:git",
-    "clean:built": "rimraf **/*.js **/*.js.map **/*.d.ts",
+    "clean": "rimraf dist && npm run clean:git",
     "clean:git": "git clean -X -d -f",
-    "coverage": "nyc npm run unit-tests",
-    "test": "npm run build && npm run coverage",
-    "unit-tests": "mocha --exit ./test/**/*.spec.js",
+    "test": "jest --coverage --verbose",
+    "test:watch": "jest --coverage --verbose --watchAll",
     "postinstall": "husky install"
   },
   "repository": {
@@ -22,6 +20,10 @@
     {
       "name": "Olof Rappestad",
       "email": "olof.rappestad@gmail.com"
+    },
+    {
+      "name": "Markus Berg",
+      "email": "markus.berg@sectra.com"
     }
   ],
   "keywords": [
@@ -41,23 +43,19 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.15",
-    "@types/mocha": "^8.2.1",
+    "@types/jest": "^26.0.20",
     "@types/nodemailer": "^6.4.0",
     "@types/nodemailer-smtp-transport": "^2.7.4",
     "@types/smtp-server": "^3.5.6",
-    "chai": "^4.3.0",
-    "codeclimate-test-reporter": "^0.5.1",
-    "coveralls": "^3.1.0",
     "husky": "^5.1.1",
-    "mocha": "^8.3.0",
+    "jest": "^26.6.3",
     "nodemailer": "^6.4.18",
-    "nodemailer-smtp-transport": "2.7.4",
-    "nyc": "^15.1.0",
+    "nodemailer-smtp-transport": "^2.7.4",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
     "rimraf": "^3.0.2",
     "smtp-server": "^3.8.0",
+    "ts-jest": "^26.5.2",
     "typescript": "^3.9.7",
     "winston": "^3.3.3",
     "winston-transport": "^4.4.0"

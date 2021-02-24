@@ -6,10 +6,10 @@
     "lib": ["es2015"],
     "module": "commonjs",
     "moduleResolution": "node",
+    "outDir": "./dist",
     "sourceMap": true,
     "strict": true,
     "target": "es5"
   },
-  "exclude": ["./lib/**/*.d.ts", "./test/**/*.d.ts", "node_modules"],
-  "filesGlob": ["./lib/**/*.ts", "./test/**/*.ts"]
+  "exclude": ["test"]
 }

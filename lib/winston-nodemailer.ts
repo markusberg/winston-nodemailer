@@ -23,14 +23,12 @@ export class WinstonNodemailer extends Transport {
 
   level: string
   name: string
-  silent: boolean
 
   constructor(private options: IWinstonNodemailerOptions) {
     super(options)
 
     this.level = options.level || 'error'
     this.name = 'nodemailer'
-    this.silent = !!options.silent
 
     this.debounce = options.debounce || 60000
     this.timestamp = options.timestamp || (() => new Date().toISOString())
@@ -45,18 +43,16 @@ export class WinstonNodemailer extends Transport {
       this.emit('logged', info)
     })
 
-    if (this.silent) {
-      return callback(null, undefined)
-    }
-
     this.messageBuffer.push(`${this.timestamp()} - ${info.message}\n\n`)
 
     if (!this.isBuffering) {
       this.isBuffering = setTimeout(() => {
-        this.transporter.sendMail({
+        const email = {
           ...this.options,
           text: this.messageBuffer.join(''),
-        } as SendMailOptions)
+        } as SendMailOptions
+
+        this.transporter.sendMail(email).catch(() => {})
         this.messageBuffer = []
         delete this.isBuffering
       }, this.debounce)
