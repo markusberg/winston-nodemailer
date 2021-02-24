@@ -1,4 +1,6 @@
-import { LogCallback, Transport, TransportInstance } from 'winston'
+import { LogCallback } from 'winston'
+import * as Transport from 'winston-transport'
+
 import { SendMailOptions, Transporter, createTransport } from 'nodemailer'
 
 import { SmtpOptions } from 'nodemailer-smtp-transport'
@@ -12,15 +14,19 @@ export interface IWinstonNodemailerOptions
   silent?: boolean
 }
 
-export class WinstonNodemailer extends Transport implements TransportInstance {
+export class WinstonNodemailer extends Transport {
   private debounce: number
   private messageBuffer: string[]
   private timestamp: () => string
   private transporter: Transporter
-  private triggered?: NodeJS.Timer
+  private isBuffering?: NodeJS.Timer
+
+  level: string
+  name: string
+  silent: boolean
 
   constructor(private options: IWinstonNodemailerOptions) {
-    super()
+    super(options)
 
     this.level = options.level || 'error'
     this.name = 'nodemailer'
@@ -34,29 +40,28 @@ export class WinstonNodemailer extends Transport implements TransportInstance {
     this.transporter = createTransport(options)
   }
 
-  public log(_level: string, msg: string, meta: object, callback: LogCallback) {
+  public log(info: any, callback: LogCallback) {
+    setImmediate(() => {
+      this.emit('logged', info)
+    })
+
     if (this.silent) {
       return callback(null, undefined)
     }
 
-    this.messageBuffer.push(
-      `${this.timestamp()} - ${msg}\n${JSON.stringify(meta, null, 4)}\n\n`,
-    )
+    this.messageBuffer.push(`${this.timestamp()} - ${info.message}\n\n`)
 
-    if (!this.triggered) {
-      this.triggered = setTimeout(() => {
-        this.sendMail(callback)
+    if (!this.isBuffering) {
+      this.isBuffering = setTimeout(() => {
+        this.transporter.sendMail({
+          ...this.options,
+          text: this.messageBuffer.join(''),
+        } as SendMailOptions)
+        this.messageBuffer = []
+        delete this.isBuffering
       }, this.debounce)
     }
-  }
 
-  private sendMail(_callback: LogCallback) {
-    this.transporter.sendMail({
-      ...this.options,
-      text: this.messageBuffer.join(''),
-    } as SendMailOptions)
-
-    this.messageBuffer = []
-    delete this.triggered
+    callback()
   }
 }
